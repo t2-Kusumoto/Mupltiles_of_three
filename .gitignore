@@ -1,15 +1,5 @@
-# Images and media
-images/
-*.jpg
-*.jpeg
-*.png
-*.gif
-*.webp
-*.webm
-*.mp4
-
-# Reference & documentation PDFs
-*.pdf
+# Specification / internal notes
+specification.txt
 
 # Operating system files
 .DS_Store
