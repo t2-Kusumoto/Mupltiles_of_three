@@ -6,7 +6,7 @@
 // --- Game Configuration Constants ---
 const GRID_SIZE = 4; // 4x4 Grid (easily modifiable to other sizes)
 const GAME_LIMIT = 59; // 59 seconds limit
-const REFRESH_INTERVAL = 3000; // Refresh numbers/colors every 3s
+const REFRESH_INTERVAL_SEC = 3; // Refresh numbers/colors every 3s
 const START_DELAY = 3000; // 3 seconds countdown delay
 const MAX_MISSES = 6;
 const MIN_NUM = 1;
@@ -35,7 +35,6 @@ let lastPointerTime = 0; // Timestamp to prevent duplicate synthetic clicks
 
 // Timers
 let gameTimerId = null;
-let refreshTimerId = null;
 let countdownTimerId = null;
 
 // --- DOM Elements ---
@@ -67,13 +66,16 @@ function getRandomColorClass() {
 }
 
 /**
- * Formats score value: e.g. "-0050" or "0120"
+ * Formats score value: e.g. "-1234" or " 4321" (when padSign is true), or "-0050" / "0120"
  */
-function formatScore(val) {
+function formatScore(val, padSign = false) {
     const isNegative = val < 0;
     const absVal = Math.abs(val);
     const padded = String(absVal).padStart(4, '0');
-    return (isNegative ? '-' : '') + padded;
+    if (isNegative) {
+        return `-${padded}`;
+    }
+    return padSign ? ` ${padded}` : padded;
 }
 
 /**
@@ -96,14 +98,13 @@ function loadHighScores() {
         if (stored) {
             const parsed = JSON.parse(stored);
             if (Array.isArray(parsed)) {
-                while (parsed.length < MAX_HISCORES) parsed.push(0);
-                return parsed.slice(0, MAX_HISCORES);
+                return parsed.filter(item => typeof item === 'number').slice(0, MAX_HISCORES);
             }
         }
     } catch (e) {
         console.warn('sessionStorage is unavailable or error reading:', e);
     }
-    return new Array(MAX_HISCORES).fill(0);
+    return [];
 }
 
 /**
@@ -113,8 +114,11 @@ function renderHighScores(scores) {
     for (let i = 1; i <= MAX_HISCORES; i++) {
         const el = document.getElementById(`hiscore-${i}`);
         if (el) {
-            const val = scores && typeof scores[i - 1] === 'number' ? scores[i - 1] : 0;
-            el.textContent = formatScore(val);
+            if (scores && i - 1 < scores.length) {
+                el.textContent = formatScore(scores[i - 1], true);
+            } else {
+                el.textContent = formatScore(0, true);
+            }
         }
     }
 }
@@ -124,7 +128,7 @@ function renderHighScores(scores) {
  */
 function saveAndRenderHighScores(newScore) {
     let scores = loadHighScores();
-    if (newScore > 0) {
+    if (typeof newScore === 'number' && !isNaN(newScore)) {
         scores.push(newScore);
         scores.sort((a, b) => b - a);
         scores = scores.slice(0, MAX_HISCORES);
@@ -328,9 +332,9 @@ function beginActiveGameplay() {
         if (timeLeft <= 0) {
             endGame(false); // Time up!
         } else {
-            // Refresh cells every 3 seconds of elapsed time
+            // Refresh cells every REFRESH_INTERVAL_SEC seconds of elapsed time
             const elapsedTime = GAME_LIMIT - timeLeft;
-            if (elapsedTime % 3 === 0) {
+            if (elapsedTime % REFRESH_INTERVAL_SEC === 0) {
                 refreshActiveCells();
             }
         }
@@ -469,7 +473,6 @@ function endGame(isClearOrMissLimit) {
 
     // Clear all timers
     clearInterval(gameTimerId);
-    clearInterval(refreshTimerId);
     clearInterval(countdownTimerId);
 
     // Calculate Time Bonus if cleared or miss limit reached

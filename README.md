@@ -63,7 +63,7 @@ python3 -m http.server 8000
 
 ### ➕ Score Additions
 
-The numbers of cleared cells are added to your score.
+The numbers displayed on cleared cells are added to the SCORE.
 
 * **Multi-Clear Bonus (Clear Button)**:
   Clearing 3 or more cells simultaneously awards an exponential bonus score (rounded to the nearest integer):

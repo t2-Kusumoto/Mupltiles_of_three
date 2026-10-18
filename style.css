@@ -96,7 +96,8 @@ body {
     letter-spacing: 0.04em;
     display: inline-block;
     text-align: right;
-    min-width: 4ch;
+    min-width: 5ch;
+    white-space: pre;
 }
 
 /* Header Panel (Info Display) */
@@ -317,7 +318,8 @@ body {
 }
 
 /* Button colors matching state */
-.btn-start {
+.btn-start,
+.btn-primary {
     background-color: #005aff; /* CUD Blue */
     color: #ffffff;
 }
