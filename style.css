@@ -71,9 +71,11 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-family: 'Montserrat', monospace;
-    font-size: 0.8rem;
-    padding: 1px 4px;
+    font-family: 'Roboto Mono', ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+    padding: 2px 4px;
     border-bottom: 1px dashed rgba(44, 37, 32, 0.08);
 }
 
@@ -84,13 +86,17 @@ body {
 .hiscore-item .rank {
     font-weight: 700;
     color: #8c827a;
-    width: 20px;
+    width: 24px;
+    display: inline-block;
 }
 
 .hiscore-item .score-val {
     font-weight: 800;
     color: #2c2520;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.04em;
+    display: inline-block;
+    text-align: right;
+    min-width: 4ch;
 }
 
 /* Header Panel (Info Display) */
