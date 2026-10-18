@@ -28,6 +28,71 @@ body {
     gap: 20px;
 }
 
+/* High Score Panel */
+#hiscore-panel {
+    width: 100%;
+    max-width: 410px;
+    background: #ffffff;
+    padding: 8px 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(44, 37, 32, 0.05);
+    border: 1px solid rgba(44, 37, 32, 0.04);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: -6px;
+}
+
+.hiscore-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    color: #8c827a;
+    text-transform: uppercase;
+}
+
+.hiscore-grid {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.hiscore-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.hiscore-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Montserrat', monospace;
+    font-size: 0.8rem;
+    padding: 1px 4px;
+    border-bottom: 1px dashed rgba(44, 37, 32, 0.08);
+}
+
+.hiscore-item:last-child {
+    border-bottom: none;
+}
+
+.hiscore-item .rank {
+    font-weight: 700;
+    color: #8c827a;
+    width: 20px;
+}
+
+.hiscore-item .score-val {
+    font-weight: 800;
+    color: #2c2520;
+    letter-spacing: 0.05em;
+}
+
 /* Header Panel (Info Display) */
 #info-panel {
     width: 100%;

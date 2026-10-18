@@ -83,6 +83,60 @@ function formatTime(val) {
     return String(Math.max(0, val)).padStart(2, '0');
 }
 
+// --- High Score (Session Storage) Management ---
+const HISCORE_STORAGE_KEY = 'multiples_of_three_hiscores';
+const MAX_HISCORES = 6;
+
+/**
+ * Loads high scores from browser session storage (cleared when browser/tab is closed)
+ */
+function loadHighScores() {
+    try {
+        const stored = sessionStorage.getItem(HISCORE_STORAGE_KEY);
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed)) {
+                while (parsed.length < MAX_HISCORES) parsed.push(0);
+                return parsed.slice(0, MAX_HISCORES);
+            }
+        }
+    } catch (e) {
+        console.warn('sessionStorage is unavailable or error reading:', e);
+    }
+    return new Array(MAX_HISCORES).fill(0);
+}
+
+/**
+ * Renders the top 6 high scores onto the high score panel
+ */
+function renderHighScores(scores) {
+    for (let i = 1; i <= MAX_HISCORES; i++) {
+        const el = document.getElementById(`hiscore-${i}`);
+        if (el) {
+            const val = scores && typeof scores[i - 1] === 'number' ? scores[i - 1] : 0;
+            el.textContent = formatScore(val);
+        }
+    }
+}
+
+/**
+ * Updates high scores with current score, stores in sessionStorage, and refreshes UI
+ */
+function saveAndRenderHighScores(newScore) {
+    let scores = loadHighScores();
+    if (newScore > 0) {
+        scores.push(newScore);
+        scores.sort((a, b) => b - a);
+        scores = scores.slice(0, MAX_HISCORES);
+        try {
+            sessionStorage.setItem(HISCORE_STORAGE_KEY, JSON.stringify(scores));
+        } catch (e) {
+            console.warn('Failed to save to sessionStorage:', e);
+        }
+    }
+    renderHighScores(scores);
+}
+
 /**
  * Displays score with flash animation
  */
@@ -111,6 +165,9 @@ function init() {
     restTimeEl.textContent = formatTime(timeLeft);
     scoreEl.textContent = formatScore(score);
     missEl.textContent = String(misses);
+
+    // Render High Scores from session storage
+    renderHighScores(loadHighScores());
 
     // Apply grid template dimensions
     gameGridEl.style.gridTemplateColumns = `repeat(${GRID_SIZE}, 1fr)`;
@@ -437,6 +494,9 @@ function endGame(isClearOrMissLimit) {
     // Display final status in message overlay
     messageOverlayEl.classList.remove('overlay-hide');
     overlayTextEl.innerHTML = `${finalMessage}<br><span style="font-size: 1.8rem; font-weight: 600;">Score: ${formatScore(score)}</span>`;
+
+    // Update and persist High Scores (sessionStorage)
+    saveAndRenderHighScores(score);
 
     // Disable action button for 3 seconds post game end (user cannot operate)
     actionBtnEl.disabled = true;
