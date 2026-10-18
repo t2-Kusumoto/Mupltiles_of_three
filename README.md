@@ -1,5 +1,8 @@
 # ⏳ Multiples-Of-Three
 
+## Note:  
+- This application was generated with Google Antigravity.  
+- This README was translated with AI and may contain inaccuracies.
 [日本語版はこちら (Japanese README)](README.ja.md)
 
 ---

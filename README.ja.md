@@ -1,5 +1,7 @@
 # ⏳ Multiples-Of-Three（3の倍数ゲーム）
 
+## お知らせ:
+- このゲームはGoogle Antigravityを利用して制作しました。  
 [English README is available here](README.md)
 
 ---
