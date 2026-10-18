@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Multiples-Of-Three | 3の倍数アクションパズル</title>
+    <meta name="description" content="3の倍数の数字を素早く見つけてロックする、脳トレアクションパズルゲーム！カラーユニバーサルデザインに対応しています。">
+    <!-- Google Fonts: Inter and Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- ヘッダー情報表示部 -->
+        <header id="info-panel">
+            <div class="info-item">
+                <span class="info-label">Time</span>
+                <span id="rest-time" class="info-value">59</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Score</span>
+                <span id="score" class="info-value">0</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Strikes</span>
+                <span id="miss" class="info-value">0</span>
+            </div>
+        </header>
+
+        <!-- メインのゲームグリッド部 -->
+        <main id="grid-wrapper">
+            <div id="grid-background"></div>
+            <div id="game-grid">
+                <!-- セルはJavaScriptにより動的に生成されます -->
+            </div>
+            <!-- カウントダウン / アナウンス用オーバーレイ -->
+            <div id="message-overlay" class="overlay-hide">
+                <div id="overlay-text">START!</div>
+            </div>
+        </main>
+
+        <!-- フッター操作部 -->
+        <footer id="control-panel">
+            <button id="action-btn" class="btn btn-primary">Start</button>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

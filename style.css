@@ -1,0 +1,289 @@
+/* Reset & Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #faf7f2;
+    color: #2c2520;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    padding: 16px;
+}
+
+/* Game Container */
+#game-container {
+    width: 100%;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Header Panel (Info Display) */
+#info-panel {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    background: #ffffff;
+    padding: 16px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(44, 37, 32, 0.06);
+    border: 1px solid rgba(44, 37, 32, 0.04);
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.info-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #8c827a;
+}
+
+.info-value {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #2c2520;
+    transition: all 0.3s ease;
+}
+
+/* Value animations */
+.value-highlight {
+    color: #03af7a; /* CUD Green */
+    transform: scale(1.15);
+}
+
+.value-penalty {
+    color: #ff4b00; /* CUD Red */
+    transform: scale(1.15);
+}
+
+/* Grid Wrapper & Background */
+#grid-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: #e6dfd5;
+    box-shadow: 0 12px 32px rgba(44, 37, 32, 0.1);
+    border: 4px solid #ffffff;
+}
+
+#grid-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0.1; /* Faintly visible initially, fully visible behind inactive cells */
+}
+
+#grid-wrapper.game-playing #grid-background {
+    opacity: 0.85; /* Active during game play for underlying image look */
+}
+
+#game-grid {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    /* grid-template-columns is set dynamically via JS for flexibility, default 3x3 */
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 6px;
+    padding: 6px;
+    z-index: 2;
+}
+
+/* Cell Styling */
+.grid-cell {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #111111; /* Always dark text for high contrast */
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    transition: background-color 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.15), opacity 0.25s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+/* Tactile Click Effect (Active cells) */
+.grid-cell:not(.locked):not(.inactive):active {
+    transform: scale(0.92);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* CUD (Color Universal Design) Base Colors for Backgrounds */
+/* Bright/Light colors to guarantee high contrast with dark text */
+.cell-color-1 {
+    background-color: #bfe4ff; /* Light Sky Blue */
+}
+
+.cell-color-2 {
+    background-color: #ffff80; /* Cream / Light Yellow */
+}
+
+.cell-color-3 {
+    background-color: #ffcabf; /* Light Pink */
+}
+
+.cell-color-4 {
+    background-color: #77d9a8; /* Light Green */
+}
+
+/* Locked State (Visually identical to active cell) */
+.grid-cell.locked {
+    /* No lock frame or icon to hide locked state */
+}
+
+/* Inactive State (Cleared and semi-transparent) */
+.grid-cell.inactive {
+    opacity: 0.3; /* Becomes transparent to show underlying flower image */
+    background-color: transparent !important;
+    border-color: rgba(255, 255, 255, 0.3);
+    color: rgba(0, 0, 0, 0.2);
+    transform: scale(0.92);
+    box-shadow: none;
+    pointer-events: none; /* Make click ineffective */
+}
+
+/* Message/Countdown Overlay */
+#message-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent; /* Remove full-screen dark cover */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+}
+
+#overlay-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #ffffff;
+    /* Floating, high-contrast readable badge over the grid */
+    background-color: rgba(44, 37, 32, 0.95);
+    backdrop-filter: blur(8px);
+    padding: 20px 32px;
+    border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(44, 37, 32, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    text-align: center;
+    letter-spacing: 0.05em;
+    line-height: 1.35;
+    animation: pulse 1.5s infinite;
+}
+
+.overlay-hide {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(1.1);
+}
+
+/* Buttons / Control Panel */
+#control-panel {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.btn {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    padding: 16px 48px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(44, 37, 32, 0.15);
+    transition: all 0.2s ease;
+    user-select: none;
+    min-width: 180px;
+}
+
+.btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 3px 10px rgba(44, 37, 32, 0.15);
+}
+
+/* Button colors matching state */
+.btn-start {
+    background-color: #005aff; /* CUD Blue */
+    color: #ffffff;
+}
+
+.btn-clear {
+    background-color: #f6aa00; /* CUD Orange */
+    color: #ffffff;
+}
+
+.btn-restart {
+    background-color: #03af7a; /* CUD Green */
+    color: #ffffff;
+}
+
+/* Animations */
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        opacity: 0.9;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.95);
+        opacity: 0.9;
+    }
+}
+
+/* Lock/Score Pop animation */
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+    100% { transform: scale(1); }
+}
+
+.pop-animation {
+    animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}

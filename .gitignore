@@ -1,0 +1,22 @@
+# Images and media
+images/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.webm
+*.mp4
+
+# Reference & documentation PDFs
+*.pdf
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
