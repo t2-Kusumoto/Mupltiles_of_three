@@ -11,6 +11,14 @@
 > **This game is created purely for casual "killing time" (暇つぶし)!**  
 > A simple, fast-paced mental arithmetic and brain-training action puzzle you can easily play in your PC browser during spare moments.
 
+---  
+
+![geme image](./assets/screenshots.png)
+
+---
+
+
+
 ---
 
 ## 🎮 Overview
